@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 col-lg-10 col-lg-offset-2">
+        <h2>Search for the Stock Price<br><br></h2>
+
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <label>Name: Stock Code (eg. AAPL, GOOG, MSFT)</label>
+            <div class="form-group">
+              <input type="text" id='stockcode'/>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-6 col-md-6 col-lg-6">
+            <label>Date: From</label>
+            <div class="form-group">
+              <div class="input-group">
+                <input type='text' id='datetimepicker1'/>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-6 col-lg-6">
+            <label>Date: To</label>
+            <div class="form-group">
+              <div class="input-group">
+                <input type='text' id='datetimepicker2'/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <button class="btn btn-success search">Search</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Meta Data -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="author" content="Seokhoon Lee">
+
+  {% if title %}
+  <title>{{ title }} - Stock Analysis Tool</title>
+  {% else %}
+  <title>Stock Analysis Tool</title>
+  {% endif %}
+  <!-- <link rel="shortcut icon" type="image/x-icon" href="img/icon.png"/> -->
+  <!-- <link rel="image_src" href="img/icon-thumbnail.png"/> -->
+
+  <!-- Bootstrap Core CSS -->
+  <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Font Awesome CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+  <!-- Date Picker CSS -->
+  <link href="../static/css/bootstrap-datepicker.min.css" rel="stylesheet">
+
+  <!-- D3 Chart CSS -->
+  <link href="../static/css/chart.css" rel="stylesheet" >
+
+  <!-- Custom CSS -->
+  <link href="../static/css/custom.css" rel="stylesheet">
+
+  <!-- Custom Fonts -->
+  <link href="../static/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <!-- TOP NAV BAR -->
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">Stock Analysis Tool for Software Companies</a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#">Dashboard</a></li>
+          <li><a href="#">Settings</a></li>
+        </ul>
+          <form class="navbar-form navbar-right">
+          <input type="text" class="form-control" placeholder="Search...">
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  <!-- SIDE NAV BAR -->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-2 col-md-2 col-lg-2 sidebar noscroll">
+        <ul class="nav nav-sidebar">
+          <li class="active"><a href="index.html">Overview</a></li>
+          <li><a href="stockprice.html">Stock Price Chart</a></li>
+          <li><a href="sentiment.html">Tweet Sentiment Chart</a></li>
+          <li><a href="#">Customized Chart</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  {% block content %}{% endblock %}
+
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+  <!-- Include all compiled plugins (below), or include individual files as needed -->
+  <script src="../static/js/bootstrap.min.js"></script>
+  <script src="../static/js/moment.min.js"></script>
+  <script src="../static/js/bootstrap-datetimepicker.js"></script>
+
+  {% if stockprice %}
+  <!-- Get Stock Price using Yahoo Finance API -->
+  <script src="../static/tools/stock-price-getter.js"></script>
+  {% endif %}
+
+  <!-- Noscript Tag -->
+  <noscript>Your browser does not support JavaScript!</noscript>
+</body>
+
+</html>
