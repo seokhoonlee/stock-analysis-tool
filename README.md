@@ -30,6 +30,8 @@ Open web browser and enter the following url into the url address bar:
 
 ## Language of Choice
 
+Python, Javascript
+
 ## Framework of Choice
 
 
