@@ -1,20 +1,58 @@
-function getStockPrice(stockName, dateFrom, dateTo) {
-	console.log(stockName);
-	console.log(dateFrom);
-	console.log(dateTo);
+// function getStockPrice(stockName, dateFrom, dateTo) {
+// 	console.log(stockName);
+// 	console.log(dateFrom);
+// 	console.log(dateTo);
 
-	var BASE_URL = 'https://query.yahooapis.com/v1/public/yql?q=';
-	var YQL_QUERY = 'select * from yahoo.finance.historicaldata where symbol in ("' + stockName + '") and startDate = "' + dateFrom + '" and endDate = "' + dateTo + '"';
-	var YQL_QUERY_STR = encodeURI(BASE_URL + YQL_QUERY);
-	var QUERY_STR = YQL_QUERY_STR + '&format=json&diagnostics=true&env=store://datatables.org/alltableswithkeys'
+// 	var BASE_URL = 'https://query.yahooapis.com/v1/public/yql?q=';
+// 	var YQL_QUERY = 'select * from yahoo.finance.historicaldata where symbol in ("' + stockName + '") and startDate = "' + dateFrom + '" and endDate = "' + dateTo + '"';
+// 	var YQL_QUERY_STR = encodeURI(BASE_URL + YQL_QUERY);
+// 	var QUERY_STR = YQL_QUERY_STR + '&format=json&diagnostics=true&env=store://datatables.org/alltableswithkeys'
 
-	$.getJSON(QUERY_STR, function(data) {
-		console.log(data);
-	});
-}
+// 	$.getJSON(QUERY_STR, function(data) {
+// 		var TSV_STRING = 'data\t' + stockName + '\n';	
+
+// 		for (var i = 0; i < data.query.count; i++) {
+// 			TSV_STRING += data.query.results.quote[i].Date + '\t' + data.query.results.quote[i].Close + '\n';
+// 		}
+
+// 		console.log(TSV_STRING);
+// 	});
+// }
 
 $(".search").on("click", function() {
-	getStockPrice($("#stockcode").val(), $("#datetimepicker1").val(), $("#datetimepicker2").val());
+	// getStockPrice($("#stockcode").val(), $("#datetimepicker1").val(), $("#datetimepicker2").val());
+
+	var stockCode = $("#stockCode").val();
+	var startTime = $("#datetimepicker1").val();
+	var endTime = $("#datetimepicker2").val();
+
+	var data = {stockCode: stockCode, startTime: startTime, endTime: endTime};
+
+	$.ajax({
+        type : "POST",
+        url : "/stockprice/query/" + stockCode + "/" + startTime + "/" + endTime,
+        data: JSON.stringify(data),
+        contentType: 'application/json;charset=UTF-8',
+        success: function(result) {
+        	// possibly refresh the page
+            console.log(result);
+            updateData();
+        }
+    });	
+
+	console.log(data);
+});
+
+$(".clear").on("click", function() {
+	$.ajax({
+        type : "POST",
+        url : "/stockprice/clear",
+        data: JSON.stringify(""),
+        contentType: 'application/json;charset=UTF-8',
+        success: function(result) {
+        	updateData();
+        }
+    });	
 });
 
 $("#datetimepicker1").datetimepicker({

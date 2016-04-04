@@ -27,8 +27,8 @@
   <!-- Date Picker CSS -->
   <link href="../static/css/bootstrap-datepicker.min.css" rel="stylesheet">
 
-  <!-- D3 Chart CSS -->
-  <link href="../static/css/chart.css" rel="stylesheet" >
+  <!-- IMPORT CSS FILE -->
+  {% block css_import %}{% endblock %}  
 
   <!-- Custom CSS -->
   <link href="../static/css/custom.css" rel="stylesheet">
@@ -61,9 +61,9 @@
     <div class="row">
       <div class="col-sm-2 col-md-2 col-lg-2 sidebar noscroll">
         <ul class="nav nav-sidebar">
-          <li class="active"><a href="index.html">Overview</a></li>
-          <li><a href="stockprice.html">Stock Price Chart</a></li>
-          <li><a href="sentiment.html">Tweet Sentiment Chart</a></li>
+          <li class="active"><a href="index">Overview</a></li>
+          <li><a href="stockprice">Stock Price Chart</a></li>
+          <li><a href="sentiment">Tweet Sentiment Chart</a></li>
           <li><a href="#">Customized Chart</a></li>
         </ul>
       </div>
@@ -81,11 +81,9 @@
   <script src="../static/js/moment.min.js"></script>
   <script src="../static/js/bootstrap-datetimepicker.js"></script>
 
-  {% if stockprice %}
-  <!-- Get Stock Price using Yahoo Finance API -->
-  <script src="../static/tools/stock-price-getter.js"></script>
-  {% endif %}
-
+  <!-- IMPORT JS FILE -->
+  {% block js_import %}{% endblock %}
+  
   <!-- Noscript Tag -->
   <noscript>Your browser does not support JavaScript!</noscript>
 </body>
