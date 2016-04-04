@@ -27,7 +27,7 @@ d3.json("sentiment/data", function(error, root) {
 
   node.append("circle")
       .attr("r", function(d) { return d.r; })
-      .style("fill", function(d) { return color(d.packageName); });
+      .style("fill", function(d) { return d.color; });
 
   node.append("text")
       .attr("dy", ".3em")
@@ -41,7 +41,7 @@ function classes(root) {
 
   function recurse(name, node) {
     if (node.children) node.children.forEach(function(child) { recurse(node.name, child); });
-    else classes.push({packageName: name, className: node.name, value: node.size});
+    else classes.push({packageName: name, className: node.name, value: node.size, color: node.color});
   }
 
   recurse(null, root);
