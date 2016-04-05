@@ -59,11 +59,6 @@ def stockprice():
   return render_template("stockprice.html",
                          title='Stock Price')
 
-@app.route('/sentiment')
-def sentiment():
-  return render_template("sentiment.html",
-                         title='Market Sentiment')
-
 @app.route("/stockprice/query/<stock_code>/<start_time>/<end_time>", methods=['POST'])
 @crossdomain(origin='*')
 def stockprice_query(stock_code, start_time, end_time):
@@ -116,6 +111,29 @@ def stockprice_data():
 	data_directory = current_directory + '/data/data.tsv'
 	data = open(data_directory, 'r')
 	return data.read()
+
+@app.route('/sentiment')
+def sentiment():
+  return render_template("sentiment.html",
+                         title='Market Sentiment')
+
+@app.route("/stockprice/clear", methods=['POST'])
+@crossdomain(origin='*')
+def sentiment_clear():
+	data_text = '{"name": "sentiment","children": []}'
+
+	current_directory = os.getcwd()
+	data_directory = current_directory + '/data/data.json'
+	data = open(data_directory, 'w')
+
+	data.write(data_text)
+	
+	data.close()
+
+	return render_template("stockprice.html",
+                         title='Stock Price',
+                         stockprice=True,
+                         data=True)
 
 @app.route("/sentiment/data")
 def sentiment_data():

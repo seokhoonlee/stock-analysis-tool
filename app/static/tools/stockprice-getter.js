@@ -34,7 +34,6 @@ $(".search").on("click", function() {
         data: JSON.stringify(data),
         contentType: 'application/json;charset=UTF-8',
         success: function(result) {
-        	// possibly refresh the page
             console.log(result);
             updateData();
         }
