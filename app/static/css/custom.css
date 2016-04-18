@@ -38,3 +38,7 @@ body {
 .bottom-sidebar a:hover{
 	background-color: #2980B9 !important;
 }
+
+.sidebar-icon-big {
+	font-size: 50px;
+}

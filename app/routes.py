@@ -62,27 +62,51 @@ def technical():
 @app.route("/technical/query/<stock_code>/<start_time>/<end_time>", methods=['POST'])
 @crossdomain(origin='*')
 def technical_query(stock_code, start_time, end_time):
-	stock = Share(stock_code)
+  stock = Share(stock_code)
 
-	historical_data = stock.get_historical(start_time, end_time)
+  historical_data = stock.get_historical(start_time, end_time)
 
-	data_text = "date\t" + str(stock_code) + "\n"
+  print(historical_data)
 
-	for index, value in enumerate(historical_data):
-		date = str(historical_data[len(historical_data) - 1 - index]['Date'])
-		date = date.replace('-','')
-		close = str(historical_data[len(historical_data) - 1 - index]['Close'])
-		data_text += date + "\t" + close + "\n"
+  data_text = "date\t" + "High\t" + "Low\n"
+  # data_text = "date\t" + "High\t" + "Low\t" + "Open\t" + "Close\t"
 
-	current_directory = os.getcwd()
-	data_directory = current_directory + '/data/technical.tsv'
-	data = open(data_directory, 'w')
+  for index, value in enumerate(historical_data):
+    date = str(historical_data[len(historical_data) - 1 - index]['Date'])
+    date = date.replace('-','')
+    stock_high = str(historical_data[len(historical_data) - 1 - index]['High'])
+    stock_low = str(historical_data[len(historical_data) - 1 - index]['Low'])
+    # stock_open = str(historical_data[len(historical_data) - 1 - index]['Open'])
+    # stock_close = str(historical_data[len(historical_data) - 1 - index]['Close'])
+    data_text += date + "\t" + stock_high + "\t" + stock_low + "\n"
+    # data_text += date + "\t" + stock_high + "\t" + stock_low + "\n" + stock_open + "\t" + stock_close + "\n"
 
-	data.write(data_text)
-	
-	data.close()
+  current_directory = os.getcwd()
+  data_directory = current_directory + '/data/highlow.tsv'
+  data = open(data_directory, 'w')
 
-	return render_template("technical.html",
+  data.write(data_text)
+  
+  data.close()
+
+  data_text = "date\t" + "Open\t" + "Close\n"
+
+  for index, value in enumerate(historical_data):
+    date = str(historical_data[len(historical_data) - 1 - index]['Date'])
+    date = date.replace('-','')
+    stock_open = str(historical_data[len(historical_data) - 1 - index]['Open'])
+    stock_close = str(historical_data[len(historical_data) - 1 - index]['Close'])
+    data_text += date + "\t" + stock_open + "\t" + stock_close + "\n"
+
+  current_directory = os.getcwd()
+  data_directory = current_directory + '/data/openclose.tsv'
+  data = open(data_directory, 'w')
+
+  data.write(data_text)
+  
+  data.close()
+
+  return render_template("technical.html",
                          title='Technical Analysis',
                          technical=True,
                          data=True)
@@ -90,27 +114,28 @@ def technical_query(stock_code, start_time, end_time):
 @app.route("/technical/clear", methods=['POST'])
 @crossdomain(origin='*')
 def technical_clear():
-	data_text = "date\tNIL\n"
+  data_text = "date\tNIL\n"
 
-	current_directory = os.getcwd()
-	data_directory = current_directory + '/data/technical.tsv'
-	data = open(data_directory, 'w')
+  current_directory = os.getcwd()
+  data_directory = current_directory + '/data/technical.tsv'
+  data = open(data_directory, 'w')
 
-	data.write(data_text)
-	
-	data.close()
+  data.write(data_text)
+  
+  data.close()
 
-	return render_template("technical.html",
+  return render_template("technical.html",
                          title='Technical Analysis',
                          technical=True,
                          data=True)
 
-@app.route("/technical/data")
-def technical_data():
-	current_directory = os.getcwd()
-	data_directory = current_directory + '/data/technical.tsv'
-	data = open(data_directory, 'r')
-	return data.read()
+@app.route("/technical/data/<file_name>")
+@crossdomain(origin='*')
+def technical_data(file_name):
+  current_directory = os.getcwd()
+  data_directory = current_directory + '/data/' + file_name + '.tsv'
+  data = open(data_directory, 'r')
+  return data.read()
 
 @app.route('/social')
 def social():
@@ -120,23 +145,23 @@ def social():
 @app.route("/social/clear", methods=['POST'])
 @crossdomain(origin='*')
 def social_clear():
-	data_text = '{"name": "sentiment","children": []}'
+  data_text = '{"name": "sentiment","children": []}'
 
-	current_directory = os.getcwd()
-	data_directory = current_directory + '/data/social.json'
-	data = open(data_directory, 'w')
+  current_directory = os.getcwd()
+  data_directory = current_directory + '/data/social.json'
+  data = open(data_directory, 'w')
 
-	data.write(data_text)
-	
-	data.close()
+  data.write(data_text)
+  
+  data.close()
 
-	return render_template("social.html",
+  return render_template("social.html",
                          title='Social Analysis',
                          data=True)
 
 @app.route("/social/data")
 def social_data():
-	current_directory = os.getcwd()
-	data_directory = current_directory + '/data/social.json'
-	data = open(data_directory, 'r')
-	return data.read()
+  current_directory = os.getcwd()
+  data_directory = current_directory + '/data/social.json'
+  data = open(data_directory, 'r')
+  return data.read()
