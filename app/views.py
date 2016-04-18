@@ -75,7 +75,7 @@ def stockprice_query(stock_code, start_time, end_time):
 		data_text += date + "\t" + close + "\n"
 
 	current_directory = os.getcwd()
-	data_directory = current_directory + '/data/data.tsv'
+	data_directory = current_directory + '/data/technical.tsv'
 	data = open(data_directory, 'w')
 
 	data.write(data_text)
@@ -93,7 +93,7 @@ def stockprice_clear():
 	data_text = "date\tNIL\n"
 
 	current_directory = os.getcwd()
-	data_directory = current_directory + '/data/data.tsv'
+	data_directory = current_directory + '/data/technical.tsv'
 	data = open(data_directory, 'w')
 
 	data.write(data_text)
@@ -108,7 +108,7 @@ def stockprice_clear():
 @app.route("/stockprice/data")
 def stockprice_data():
 	current_directory = os.getcwd()
-	data_directory = current_directory + '/data/data.tsv'
+	data_directory = current_directory + '/data/technical.tsv'
 	data = open(data_directory, 'r')
 	return data.read()
 
@@ -123,7 +123,7 @@ def sentiment_clear():
 	data_text = '{"name": "sentiment","children": []}'
 
 	current_directory = os.getcwd()
-	data_directory = current_directory + '/data/data.json'
+	data_directory = current_directory + '/data/social.json'
 	data = open(data_directory, 'w')
 
 	data.write(data_text)
@@ -138,6 +138,6 @@ def sentiment_clear():
 @app.route("/sentiment/data")
 def sentiment_data():
 	current_directory = os.getcwd()
-	data_directory = current_directory + '/data/data.json'
+	data_directory = current_directory + '/data/social.json'
 	data = open(data_directory, 'r')
 	return data.read()
