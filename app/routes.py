@@ -54,14 +54,14 @@ def crossdomain(origin=None, methods=None, headers=None,
 def index():
   return render_template("index.html")
 
-@app.route('/stockprice')
-def stockprice():
-  return render_template("stockprice.html",
-                         title='Stock Price')
+@app.route('/technical')
+def technical():
+  return render_template("technical.html",
+                         title='Technical Analysis')
 
-@app.route("/stockprice/query/<stock_code>/<start_time>/<end_time>", methods=['POST'])
+@app.route("/technical/query/<stock_code>/<start_time>/<end_time>", methods=['POST'])
 @crossdomain(origin='*')
-def stockprice_query(stock_code, start_time, end_time):
+def technical_query(stock_code, start_time, end_time):
 	stock = Share(stock_code)
 
 	historical_data = stock.get_historical(start_time, end_time)
@@ -82,14 +82,14 @@ def stockprice_query(stock_code, start_time, end_time):
 	
 	data.close()
 
-	return render_template("stockprice.html",
-                         title='Stock Price',
-                         stockprice=True,
+	return render_template("technical.html",
+                         title='Technical Analysis',
+                         technical=True,
                          data=True)
 
-@app.route("/stockprice/clear", methods=['POST'])
+@app.route("/technical/clear", methods=['POST'])
 @crossdomain(origin='*')
-def stockprice_clear():
+def technical_clear():
 	data_text = "date\tNIL\n"
 
 	current_directory = os.getcwd()
@@ -100,26 +100,26 @@ def stockprice_clear():
 	
 	data.close()
 
-	return render_template("stockprice.html",
-                         title='Stock Price',
-                         stockprice=True,
+	return render_template("technical.html",
+                         title='Technical Analysis',
+                         technical=True,
                          data=True)
 
-@app.route("/stockprice/data")
-def stockprice_data():
+@app.route("/technical/data")
+def technical_data():
 	current_directory = os.getcwd()
 	data_directory = current_directory + '/data/technical.tsv'
 	data = open(data_directory, 'r')
 	return data.read()
 
-@app.route('/sentiment')
-def sentiment():
-  return render_template("sentiment.html",
-                         title='Market Sentiment')
+@app.route('/social')
+def social():
+  return render_template("social.html",
+                         title='Social Analysis')
 
-@app.route("/stockprice/clear", methods=['POST'])
+@app.route("/social/clear", methods=['POST'])
 @crossdomain(origin='*')
-def sentiment_clear():
+def social_clear():
 	data_text = '{"name": "sentiment","children": []}'
 
 	current_directory = os.getcwd()
@@ -130,13 +130,12 @@ def sentiment_clear():
 	
 	data.close()
 
-	return render_template("stockprice.html",
-                         title='Stock Price',
-                         stockprice=True,
+	return render_template("social.html",
+                         title='Social Analysis',
                          data=True)
 
-@app.route("/sentiment/data")
-def sentiment_data():
+@app.route("/social/data")
+def social_data():
 	current_directory = os.getcwd()
 	data_directory = current_directory + '/data/social.json'
 	data = open(data_directory, 'r')

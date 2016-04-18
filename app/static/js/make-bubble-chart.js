@@ -12,7 +12,7 @@ var svg = d3.select("body").append("svg")
     .attr("height", diameter)
     .attr("class", "bubble");
 
-d3.json("sentiment/data", function(error, root) {
+d3.json("social/data", function(error, root) {
   if (error) throw error;
 
   var node = svg.selectAll(".node")
@@ -68,7 +68,7 @@ function updateData() {
       .attr("height", diameter)
       .attr("class", "bubble");
 
-  d3.json("sentiment/data", function(error, root) {
+  d3.json("social/data", function(error, root) {
     if (error) throw error;
 
     var node = svg.selectAll(".node")
