@@ -64,9 +64,63 @@ def technical():
 def technical_query(stock_code, start_time, end_time):
   stock = Share(stock_code)
 
+  print('stock.get_info()')
+  print(stock.get_info())
+
+  print('get_price()')
+  print(stock.get_price())
+
+  print('get_change()')
+  print(stock.get_change())
+
+  print('get_stock_exchange()')
+  print(stock.get_stock_exchange())
+
+  print('get_market_cap()')
+  print(stock.get_market_cap())
+
+  print('get_book_value()')
+  print(stock.get_book_value())
+
+  print('get_ebitda()')
+  print(stock.get_ebitda())
+
+  print('get_dividend_share()')  
+  print(stock.get_dividend_share())
+
+  print('get_dividend_yield()')
+  print(stock.get_dividend_yield())
+
+  print('get_earnings_share()')
+  print(stock.get_earnings_share())
+
+  print('get_50day_moving_avg()')
+  print(stock.get_50day_moving_avg())
+
+  print('get_200day_moving_avg()')
+  print(stock.get_200day_moving_avg())
+
+  print('get_price_earnings_ratio()')
+  print(stock.get_price_earnings_ratio())
+
+  print('get_price_earnings_growth_ratio()')
+  print(stock.get_price_earnings_growth_ratio())
+
+  print('get_price_sales()')
+  print(stock.get_price_sales())
+
+  print('get_price_book()')
+  print(stock.get_price_book())
+
+  print('get_short_ratio()')
+  print(stock.get_short_ratio())
+
   historical_data = stock.get_historical(start_time, end_time)
 
+  print('historical_data')
   print(historical_data)
+
+
 
   data_text = "date\t" + "High\t" + "Low\n"
   # data_text = "date\t" + "High\t" + "Low\t" + "Open\t" + "Close\t"
