@@ -35,8 +35,6 @@ function drawGraph(fileName) {
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  console.log(fileName);
-
   d3.tsv("technical/data/" + fileName, function(error, data) {
     if (error) throw error;
 
