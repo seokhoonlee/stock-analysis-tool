@@ -120,8 +120,6 @@ def technical_query(stock_code, start_time, end_time):
   print('historical_data')
   print(historical_data)
 
-
-
   data_text = "date\t" + "High\t" + "Low\n"
   # data_text = "date\t" + "High\t" + "Low\t" + "Open\t" + "Close\t"
 
@@ -160,6 +158,22 @@ def technical_query(stock_code, start_time, end_time):
   
   data.close()
 
+  data_text = "date\t" + "Volume\n"
+
+  for index, value in enumerate(historical_data):
+    date = str(historical_data[len(historical_data) - 1 - index]['Date'])
+    date = date.replace('-','')
+    stock_volume = str(int(historical_data[len(historical_data) - 1 - index]['Volume']) / 1000)
+    data_text += date + "\t" + stock_volume + "\n"
+
+  current_directory = os.getcwd()
+  data_directory = current_directory + '/data/volume.tsv'
+  data = open(data_directory, 'w')
+
+  data.write(data_text)
+  
+  data.close()
+
   return render_template("technical.html",
                          title='Technical Analysis',
                          technical=True,
@@ -171,7 +185,21 @@ def technical_clear():
   data_text = "date\tNIL\n"
 
   current_directory = os.getcwd()
-  data_directory = current_directory + '/data/technical.tsv'
+  data_directory = current_directory + '/data/openclose.tsv'
+  data = open(data_directory, 'w')
+
+  data.write(data_text)
+  
+  data.close()
+
+  data_directory = current_directory + '/data/highlow.tsv'
+  data = open(data_directory, 'w')
+
+  data.write(data_text)
+  
+  data.close()
+
+  data_directory = current_directory + '/data/volume.tsv'
   data = open(data_directory, 'w')
 
   data.write(data_text)

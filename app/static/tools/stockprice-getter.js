@@ -26,6 +26,10 @@ $(".search").on("click", function() {
 	var startTime = $("#datetimepicker1").val();
 	var endTime = $("#datetimepicker2").val();
 
+	if (stockCode == "" || startTime == "" || endTime == "") {
+		return;
+	}
+
 	var data = {stockCode: stockCode, startTime: startTime, endTime: endTime};
 
 	$.ajax({

@@ -1,7 +1,9 @@
-drawGraph("openclose");
-drawGraph("highlow");
+clearData()
+drawGraph("openclose", "Price (US$)");
+drawGraph("highlow", "Price (US$)");
+drawGraph("volume", "Volume (x1000)");
 
-function drawGraph(fileName) {
+function drawGraph(fileName, unit) {
   var margin = {top: 50, right: 50, bottom: 50, left: 50},
               width = 550 - margin.left - margin.right,
               height = 400 - margin.top - margin.bottom;
@@ -25,7 +27,6 @@ function drawGraph(fileName) {
       .orient("left");
 
   var line = d3.svg.line()
-      .interpolate("basis")
       .x(function(d) { return x(d.date); })
       .y(function(d) { return y(d.price); });
 
@@ -43,6 +44,10 @@ function drawGraph(fileName) {
     data.forEach(function(d) {
       d.date = parseDate(d.date);
     });
+
+    if (data.length == 0) {
+      return;
+    }
 
     var stocks = color.domain().map(function(name) {
       return {
@@ -73,7 +78,7 @@ function drawGraph(fileName) {
         .attr("y", 6)
         .attr("dy", ".71em")
         .style("text-anchor", "end")
-        .text("Price (US$)");
+        .text(unit);
 
     var stock = svg.selectAll(".stock")
         .data(stocks)
@@ -83,7 +88,21 @@ function drawGraph(fileName) {
     stock.append("path")
         .attr("class", "line")
         .attr("d", function(d) { return line(d.values); })
-        .style("stroke", function(d) { return color(d.name); });
+        .style("stroke", function(d) { 
+          if (d.name == 'Open') {
+            return "#1f77b4";
+          } else if (d.name == 'Close') {
+            return "#ff7f0e";
+          } else if (d.name == 'High') {
+            return "#2ca02c";
+          } else if (d.name == 'Low') {
+            return "#d62728";
+          } else if (d.name == 'Volume') {
+            return "#9467bd";
+          }
+
+          return "#000000";
+        });
 
     stock.append("text")
         .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
@@ -95,9 +114,13 @@ function drawGraph(fileName) {
 }
 
 function updateData() {
-  d3.selectAll("svg > *").remove();
-  d3.selectAll("svg").remove();
-
+  clearData()
   drawGraph("openclose");
   drawGraph("highlow");
+  drawGraph("volume");
+}
+
+function clearData() {
+  d3.selectAll("svg > *").remove();
+  d3.selectAll("svg").remove();
 }
