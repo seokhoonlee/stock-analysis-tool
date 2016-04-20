@@ -5,7 +5,7 @@ $(".search").on("click", function() {
 
 	$.ajax({
         type : "POST",
-        url : "/sentiment/query/" + stockCode,
+        url : "/social/query/" + stockCode,
         data: JSON.stringify(data),
         contentType: 'application/json;charset=UTF-8',
         success: function(result) {
@@ -19,7 +19,7 @@ $(".search").on("click", function() {
 $(".clear").on("click", function() {
 	$.ajax({
         type : "POST",
-        url : "/sentiment/clear",
+        url : "/social/clear",
         data: JSON.stringify(""),
         contentType: 'application/json;charset=UTF-8',
         success: function(result) {

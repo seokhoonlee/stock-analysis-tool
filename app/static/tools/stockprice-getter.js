@@ -30,7 +30,7 @@ $(".search").on("click", function() {
 
 	$.ajax({
         type : "POST",
-        url : "/stockprice/query/" + stockCode + "/" + startTime + "/" + endTime,
+        url : "/technical/query/" + stockCode + "/" + startTime + "/" + endTime,
         data: JSON.stringify(data),
         contentType: 'application/json;charset=UTF-8',
         success: function(result) {
@@ -45,7 +45,7 @@ $(".search").on("click", function() {
 $(".clear").on("click", function() {
 	$.ajax({
         type : "POST",
-        url : "/stockprice/clear",
+        url : "/technical/clear",
         data: JSON.stringify(""),
         contentType: 'application/json;charset=UTF-8',
         success: function(result) {
