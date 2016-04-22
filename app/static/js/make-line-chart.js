@@ -1,9 +1,9 @@
-clearData()
-drawGraph("openclose", "Price (US$)");
-drawGraph("highlow", "Price (US$)");
-drawGraph("volume", "Volume (x1000)");
+clearLineGraph()
+drawLineGraph("openclose", "Price (US$)");
+drawLineGraph("highlow", "Price (US$)");
+drawLineGraph("volume", "Volume (x1000)");
 
-function drawGraph(fileName, unit) {
+function drawLineGraph(fileName, unit) {
   var margin = {top: 50, right: 50, bottom: 50, left: 50},
               width = 550 - margin.left - margin.right,
               height = 400 - margin.top - margin.bottom;
@@ -113,14 +113,14 @@ function drawGraph(fileName, unit) {
   });
 }
 
-function updateData() {
-  clearData()
-  drawGraph("openclose");
-  drawGraph("highlow");
-  drawGraph("volume");
+function updateLineGraph() {
+  clearLineGraph()
+  drawLineGraph("openclose");
+  drawLineGraph("highlow");
+  drawLineGraph("volume");
 }
 
-function clearData() {
+function clearLineGraph() {
   d3.selectAll("svg > *").remove();
   d3.selectAll("svg").remove();
 }

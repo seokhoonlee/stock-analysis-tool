@@ -5,6 +5,14 @@
       font: 10px sans-serif;
     }
 
+    .bar--positive {
+      fill: #2ca02c;
+    }
+
+    .bar--negative {
+      fill: #d62728;
+    }
+
     .axis path,
     .axis line {
       fill: none;
@@ -18,12 +26,12 @@
 
     .line {
       fill: none;
-      stroke: steelblue;
+      stroke: #1f77b4;
       stroke-width: 1.5px;
     }
 
-    .bar {
-      fill: steelblue;
+    .all-positive {
+      padding-left: 60px;
     }
   </style>
 {% endblock %}
@@ -71,7 +79,10 @@
         <div class="row">
           <div id="svg-graph-technical"></div>
           <script src="//d3js.org/d3.v3.min.js"></script>
+          <!-- <script src="https://rawgit.com/gka/d3-jetpack/master/d3-jetpack.js"></script> -->
+          <!-- <script src="../static/js/make-table.js"></script> -->
           <script src="../static/js/make-line-chart.js"></script>
+          <script src="../static/js/make-bar-chart.js"></script>
         </div>
       </div>
     </div>

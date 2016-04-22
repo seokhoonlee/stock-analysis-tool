@@ -120,18 +120,26 @@ def technical_query(stock_code, start_time, end_time):
   print('historical_data')
   print(historical_data)
 
+  data_text = "Symbol\t" + "Stock Exchange\t" + "Price\t" + "Market Cap\t" + "Book Value\t" + "EBITDA\t" + "50d Moving Avg\t" + "100d Moving Avg\n"
+  data_text += str(stock.get_info()['symbol']) + "\t" + str(stock.get_stock_exchange()) + "\t" + str(stock.get_price()) + "\t" + str(stock.get_market_cap()) + "\t" + str(stock.get_book_value()) + "\t";
+  data_text += str(stock.get_ebitda()) + "\t" + str(stock.get_50day_moving_avg()) + "\t" + str(stock.get_200day_moving_avg()) + "\n";
+
+  current_directory = os.getcwd()
+  data_directory = current_directory + '/data/info.tsv'
+  data = open(data_directory, 'w')
+
+  data.write(data_text)
+  
+  data.close()
+
   data_text = "date\t" + "High\t" + "Low\n"
-  # data_text = "date\t" + "High\t" + "Low\t" + "Open\t" + "Close\t"
 
   for index, value in enumerate(historical_data):
     date = str(historical_data[len(historical_data) - 1 - index]['Date'])
     date = date.replace('-','')
     stock_high = str(historical_data[len(historical_data) - 1 - index]['High'])
     stock_low = str(historical_data[len(historical_data) - 1 - index]['Low'])
-    # stock_open = str(historical_data[len(historical_data) - 1 - index]['Open'])
-    # stock_close = str(historical_data[len(historical_data) - 1 - index]['Close'])
     data_text += date + "\t" + stock_high + "\t" + stock_low + "\n"
-    # data_text += date + "\t" + stock_high + "\t" + stock_low + "\n" + stock_open + "\t" + stock_close + "\n"
 
   current_directory = os.getcwd()
   data_directory = current_directory + '/data/highlow.tsv'
@@ -174,6 +182,53 @@ def technical_query(stock_code, start_time, end_time):
   
   data.close()
 
+  data_text = "name\t" + "value\n"
+
+  if stock.get_change() != None:
+    name = "Change"
+    value = str(stock.get_change())
+    data_text += name + "\t" + value + "\n"
+  if stock.get_dividend_share() != None:
+    name = "Dividend Share"
+    value = str(stock.get_dividend_share())
+    data_text += name + "\t" + value + "\n"
+  if stock.get_dividend_yield() != None:
+    name = "Divident Yield"
+    value = str(stock.get_dividend_yield())
+    data_text += name + "\t" + value + "\n"
+  if stock.get_earnings_share() != None:
+    name = "Earning Share"
+    value = str(stock.get_earnings_share())
+    data_text += name + "\t" + value + "\n"
+  if stock.get_price_earnings_ratio() != None:
+    name = "Price Earning"
+    value = str(stock.get_price_earnings_ratio())
+    data_text += name + "\t" + value + "\n"
+  if stock.get_price_earnings_growth_ratio() != None:
+    name = "Price Earning Growth"
+    value = str(stock.get_price_earnings_growth_ratio())
+    data_text += name + "\t" + value + "\n"
+  if stock.get_price_sales() != None:
+    name = "Price Sales"
+    value = str(stock.get_price_sales())
+    data_text += name + "\t" + value + "\n"
+  if stock.get_price_book() != None:
+    name = "Price Book"
+    value = str(stock.get_price_book())
+    data_text += name + "\t" + value + "\n"
+  if stock.get_short_ratio() != None:
+    name = "Short"
+    value = str(stock.get_short_ratio())
+    data_text += name + "\t" + value + "\n"
+
+  current_directory = os.getcwd()
+  data_directory = current_directory + '/data/ratio.tsv'
+  data = open(data_directory, 'w')
+
+  data.write(data_text)
+  
+  data.close()
+
   return render_template("technical.html",
                          title='Technical Analysis',
                          technical=True,
@@ -206,10 +261,29 @@ def technical_clear():
   
   data.close()
 
+  data_text = ""
+
+  data_directory = current_directory + '/data/ratio.tsv'
+  data = open(data_directory, 'w')
+
+  data.write(data_text)
+  
+  data.close()
+
+  data_text = ""
+
+  data_directory = current_directory + '/data/info.tsv'
+  data = open(data_directory, 'w')
+
+  data.write(data_text)
+  
+  data.close()
+
   return render_template("technical.html",
                          title='Technical Analysis',
                          technical=True,
-                         data=True)
+                         data=True,
+                         clear=True)
 
 @app.route("/technical/data/<file_name>")
 @crossdomain(origin='*')

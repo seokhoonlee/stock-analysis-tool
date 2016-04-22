@@ -1,15 +1,15 @@
-// drawGraph("volume");
+drawBarGraph("ratio");
 
-function drawGraph(fileName) {
+function drawBarGraph(fileName) {
   var margin = {top: 50, right: 50, bottom: 50, left: 50},
-      width = 550 - margin.left - margin.right,
-      height = 400 - margin.top - margin.bottom;
+    width = 550 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
 
-  var x = d3.scale.ordinal()
-      .rangeRoundBands([0, width], .1);
+  var x = d3.scale.linear()
+      .range([0, width]);
 
-  var y = d3.scale.linear()
-      .range([height, 0]);
+  var y = d3.scale.ordinal()
+      .rangeRoundBands([0, height], 0.1);
 
   var xAxis = d3.svg.axis()
       .scale(x)
@@ -18,54 +18,76 @@ function drawGraph(fileName) {
   var yAxis = d3.svg.axis()
       .scale(y)
       .orient("left")
-      .ticks(10, "%");
+      .tickSize(6, 0);
 
-  var svg = d3.select("#svg-graph-technical").append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  var allPositive = true;
+
 
   d3.tsv("technical/data/" + fileName, type, function(error, data) {
     if (error) throw error;
 
-    x.domain(data.map(function(d) { return d.date; }));
-    y.domain([0, d3.max(data, function(d) { return d.Volume; })]);
+    if (data.length == 0) {
+      return;
+    }
+
+    var svg = d3.select("#svg-graph-technical").append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .attr("class", function() {
+        for (var i = 0; i < data.length; i++) {
+          if (data[i].value < 0) {
+
+            return "";
+          }
+        }
+        return "all-positive";
+      })
+    .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    x.domain(d3.extent(data, function(d) { return d.value; })).nice();
+    y.domain(data.map(function(d) { return d.name; }));
+
+    svg.selectAll(".bar")
+        .data(data)
+      .enter().append("rect")
+        .attr("class", function(d) { return "bar bar--" + (d.value < 0 ? "negative" : "positive"); })
+        .attr("x", function(d) { return x(Math.min(0, d.value)); })
+        .attr("y", function(d) { return y(d.name); })
+        .attr("width", function(d) { return Math.abs(x(d.value) - x(0)); })
+        .attr("height", y.rangeBand());
 
     svg.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis);
 
-    svg.append("g")
+    var tickNegative = svg.append("g")
         .attr("class", "y axis")
+        .attr("transform", "translate(" + x(0) + ",0)")
         .call(yAxis)
-      .append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 6)
-        .attr("dy", ".71em")
-        .style("text-anchor", "end")
-        .text("Volume (M)");
+      .selectAll(".tick")
+      .filter(function(d, i) { return data[i].value < 0; });
 
-    svg.selectAll(".bar")
-        .data(data)
-      .enter().append("rect")
-        .attr("class", "bar")
-        .attr("x", function(d) { return x(d.date); })
-        .attr("width", x.rangeBand())
-        .attr("y", function(d) { return y(d.Volume); })
-        .attr("height", function(d) { return height - y(d.Volume); });
+    tickNegative.select("line")
+        .attr("x2", 6);
+
+    tickNegative.select("text")
+        .attr("x", 9)
+        .style("text-anchor", "start");
   });
 
   function type(d) {
-    d.Volume = +d.Volume;
+    d.value = +d.value;
     return d;
   }
 }
 
-function updateData() {
+function updateBarGraph() {
+  drawBarGraph("ratio");
+}
+
+function clearBarGraph() {
   d3.selectAll("svg > *").remove();
   d3.selectAll("svg").remove();
-  
-  drawGraph("volume");
 }
