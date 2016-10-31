@@ -33,31 +33,31 @@ $(".search").on("click", function() {
 	var data = {stockCode: stockCode, startTime: startTime, endTime: endTime};
 
 	$.ajax({
-        type : "POST",
-        url : "/technical/query/" + stockCode + "/" + startTime + "/" + endTime,
-        data: JSON.stringify(data),
-        contentType: 'application/json;charset=UTF-8',
-        success: function(result) {
-        	// updateTable();
-            updateLineGraph();
-            updateBarGraph();
-        }
-    });	
+    type : "POST",
+    url : "/technical/query/" + stockCode + "/" + startTime + "/" + endTime,
+    data: JSON.stringify(data),
+    contentType: 'application/json;charset=UTF-8',
+    success: function(result) {
+    	// updateTable();
+      updateLineGraph();
+      updateBarGraph();
+    }
+  });	
 
 	console.log(data);
 });
 
 $(".clear").on("click", function() {
 	$.ajax({
-        type : "POST",
-        url : "/technical/clear",
-        data: JSON.stringify(""),
-        contentType: 'application/json;charset=UTF-8',
-        success: function(result) {
-        	clearLineGraph();
-        	clearBarGraph();
-        }
-    });	
+    type : "POST",
+    url : "/technical/clear",
+    data: JSON.stringify(""),
+    contentType: 'application/json;charset=UTF-8',
+    success: function(result) {
+    	clearLineGraph();
+    	clearBarGraph();
+    }
+  });	
 });
 
 $("#datetimepicker1").datetimepicker({
