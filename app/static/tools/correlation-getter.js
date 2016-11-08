@@ -16,7 +16,8 @@ $(".search").on("click", function() {
     data: JSON.stringify(data),
     contentType: 'application/json;charset=UTF-8',
     success: function(result) {
-      // SKSK
+      drawLineGraph("open1", "Price (US$)");
+      drawLineGraph("open2", "Price (US$)");
     }
   }); 
 
@@ -26,11 +27,11 @@ $(".search").on("click", function() {
 $(".clear").on("click", function() {
   $.ajax({
     type : "POST",
-    url : "/technical/clear",
+    url : "/correlation/clear",
     data: JSON.stringify(""),
     contentType: 'application/json;charset=UTF-8',
     success: function(result) {
-      // SKSK
+      clearLineGraph();
     }
   }); 
 });

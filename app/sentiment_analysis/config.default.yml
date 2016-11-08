@@ -1,0 +1,35 @@
+# Copy and paste this file as "config.yml" to overwrite your custom config.
+files:
+  development: data/development.csv
+  training: data/training.csv
+  testing: data/testing.csv
+  lexicon: data/lexicon.txt
+directories:
+  tweets: data/tweets
+  users: data/users
+constants:
+  # The file to train.
+  file_to_train: 'training'
+  # The file to test.
+  file_to_test: 'testing'
+  # Whether to use 16 or 4 labels.
+  number_of_labels: 4
+  # Only include words with a count more than this in the feature set.
+  token_minimum_count: 1  
+  # Which stopwords to remove, if stopwords_ignore_negation is true.
+  stopwords_negation: ['not', 'don', 'no']
+  # Which countable attributes of the tweet user to include in the feature set.
+  social_user_countable: ['favourites', 'followers', 'friends', 'statuses', 'listed']
+  # Which boolean attributes of the tweet user to include in the feature set.
+  social_user_boolean: ['verified', 'lang']
+  # KNN weights to use, either 'uniform' or 'distance'.
+  knn_weights: 'uniform'
+  # SVM kernel to use, either 'linear', 'poly', 'rbf', 'sigmoid' or 'precomputed'.
+  svm_kernel: 'linear'
+toggles:
+  # Remove words like "not" from the stopwords set.
+  stopwords_ignore_negation: true
+  # Whether to generate tweets from lexicon.
+  generate_lexicon_data: true
+  # Whether to stem the tokens.
+  stem_tokens: true

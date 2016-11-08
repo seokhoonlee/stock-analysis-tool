@@ -197,12 +197,12 @@ def write_social_files(query_word):
   query_string = query_word
   query_string += ' filter:safe -filter:links -http' # filter safe tweets without links
 
-  max_tweets = 30 # maximum 100 tweets
+  max_tweets = 20 # maximum 100 tweets
 
   count = 0
   meta_count = 0
 
-  while count < 5 and meta_count < 10:
+  while count < 5 and meta_count < 3:
     meta_count += 1
     count = 0
 
@@ -214,7 +214,7 @@ def write_social_files(query_word):
       tweet_text += (tweet.text + " ")
       count += 1
     
-  if meta_count == 10:
+  if meta_count == 3:
     clear_social_files()
     return
 
@@ -260,12 +260,12 @@ def write_social_files(query_word):
       query_string = keyword["text"]
       query_string += ' filter:safe -filter:links -http' # filter safe tweets without links
 
-      max_tweets = 10 # maximum 100 tweets
+      max_tweets = 20 # maximum 100 tweets
 
       count = 0
       meta_count = 0
 
-      while count < 5 and meta_count < 10:
+      while count < 5 and meta_count < 3:
         meta_count += 1
         count = 0
         
@@ -277,7 +277,7 @@ def write_social_files(query_word):
           tweet_text += (tweet.text + " ")
           count += 1
 
-      if meta_count == 10:
+      if meta_count == 3:
         continue
 
       print tweet_text
@@ -306,24 +306,44 @@ def write_social_files(query_word):
 
   write_to_file(social_directory, json.dumps(social_dict, ensure_ascii=True))
 
-def write_correlation_files(stock_code, start_time, end_time, num):
-  stock = Share(stock_code)
+def write_correlation_files(stock_code1, stock_code2, start_time, end_time):
+  stock = Share(stock_code1)
 
-  historical_data = stock.get_historical(start_time, end_time)
+  historical_data1 = stock.get_historical(start_time, end_time)
 
   open_text = "date\t" + "Open\n"
 
-  for index, value in enumerate(historical_data):
-    date = str(historical_data[len(historical_data) - 1 - index]['Date'])
+  for index, value in enumerate(historical_data1):
+    date = str(historical_data1[len(historical_data1) - 1 - index]['Date'])
     date = date.replace('-','')
 
-    stock_open = str(historical_data[len(historical_data) - 1 - index]['Open'])
+    stock_open = str(historical_data1[len(historical_data1) - 1 - index]['Open'])
 
     open_text += date + "\t" + stock_open + "\n"
 
-  open_directory = '/data/open' + str(num) + '.tsv'
+  open_directory = '/data/open1.tsv'
 
   write_to_file(open_directory, open_text)
+
+  stock = Share(stock_code2)
+
+  historical_data2 = stock.get_historical(start_time, end_time)
+
+  open_text = "date\t" + "Open\n"
+
+  for index, value in enumerate(historical_data2):
+    date = str(historical_data2[len(historical_data2) - 1 - index]['Date'])
+    date = date.replace('-','')
+
+    stock_open = str(historical_data2[len(historical_data2) - 1 - index]['Open'])
+
+    open_text += date + "\t" + stock_open + "\n"
+
+  open_directory = '/data/open2.tsv'
+
+  write_to_file(open_directory, open_text)
+
+
 
 def clear_technical_files():
   clear_text = "date\tNIL\n"

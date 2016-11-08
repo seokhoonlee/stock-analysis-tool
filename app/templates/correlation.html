@@ -1,6 +1,39 @@
 {% extends "base.html" %}
 {% block css_import %}
+  <style>
+    svg {
+      font: 10px sans-serif;
+    }
 
+    .bar--positive {
+      fill: #2ca02c;
+    }
+
+    .bar--negative {
+      fill: #d62728;
+    }
+
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+    }
+
+    .x.axis path {
+      display: none;
+    }
+
+    .line {
+      fill: none;
+      stroke: #1f77b4;
+      stroke-width: 1.5px;
+    }
+
+    .all-positive {
+      padding-left: 60px;
+    }
+  </style>
 {% endblock %}
 {% block content %}
   <div class="container-fluid">
@@ -10,13 +43,13 @@
 
         <div class="row">
           <div class="col-sm-6 col-md-6 col-lg-6">
-            <label>Name: Stock Code (eg. AAPL, GOOG, MSFT)</label>
+            <label>First Stock Code (eg. AAPL, GOOG, MSFT):</label>
             <div class="form-group">
               <input type="text" id='stockCode1'/>
             </div>
           </div>
           <div class="col-sm-6 col-md-6 col-lg-6">
-            <label>Name: Stock Code (eg. AAPL, GOOG, MSFT)</label>
+            <label>Second Stock Code (eg. AAPL, GOOG, MSFT):</label>
             <div class="form-group">
               <input type="text" id='stockCode2'/>
             </div>
@@ -52,10 +85,9 @@
         <div class="row">
           <div id="svg-graph-technical"></div>
           <script src="//d3js.org/d3.v3.min.js"></script>
+          <script src="../static/js/make-line-chart.js"></script>
           
 
-
-          
         </div>
       </div>
     </div>

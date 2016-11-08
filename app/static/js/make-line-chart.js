@@ -1,8 +1,3 @@
-clearLineGraph()
-drawLineGraph("openclose", "Price (US$)");
-drawLineGraph("highlow", "Price (US$)");
-drawLineGraph("volume", "Volume (x1000)");
-
 function drawLineGraph(fileName, unit) {
   var margin = {top: 50, right: 50, bottom: 50, left: 50},
                 width = 550 - margin.left - margin.right,
@@ -112,13 +107,6 @@ function drawLineGraph(fileName, unit) {
       .attr("dy", ".35em")
       .text(function(d) { return d.name; });
   });
-}
-
-function updateLineGraph() {
-  clearLineGraph();
-  drawLineGraph("openclose");
-  drawLineGraph("highlow");
-  drawLineGraph("volume");
 }
 
 function clearLineGraph() {

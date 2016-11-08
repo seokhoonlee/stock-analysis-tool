@@ -1,0 +1,6 @@
+nltk==3.1
+numpy==1.10.4
+PyYAML==3.11
+scikit-learn==0.17
+scipy==0.17.0
+wheel==0.24.0

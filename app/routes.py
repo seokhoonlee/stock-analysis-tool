@@ -64,6 +64,8 @@ def technical():
 
 @app.route('/social')
 def social():
+  file_manager.clear_social_files()
+  
   return render_template("social.html",
                          title='Social Analysis')
 
@@ -94,8 +96,7 @@ def social_query(key_word):
 @app.route("/correlation/query/<stock_code1>/<stock_code2>/<start_time>/<end_time>", methods=['POST'])
 @crossdomain(origin='*')
 def correlation_query(stock_code1, stock_code2, start_time, end_time):
-  file_manager.write_correlation_files(stock_code1, start_time, end_time, 1)
-  file_manager.write_correlation_files(stock_code2, start_time, end_time, 2)
+  file_manager.write_correlation_files(stock_code1, stock_code2, start_time, end_time)
 
   return render_template("correlation.html",
                          title='Correlation Analysis',
