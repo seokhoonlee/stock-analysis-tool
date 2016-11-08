@@ -1,5 +1,8 @@
 import os
+from yahoo_finance import Share
 import quandl
+quandl.ApiConfig.api_key = 'VmCnUrM6WssTsDacrM1F'
+
 import tweepy
 
 auth = tweepy.OAuthHandler('ZnSb3IMNZXb7gmQtwGne1M5Mn', 'HnIuFSbFpgpMytffuxjViQOJmEpxT8WSPermMsyU9ul8OpOMSi')
@@ -7,9 +10,14 @@ auth.set_access_token('793012381852897281-VCldOuLSsn8CLiAxl1IbYERKkoExdZL', 'cTR
 
 api = tweepy.API(auth)
 
-from yahoo_finance import Share
+print os.getcwd()
 
-quandl.ApiConfig.api_key = 'VmCnUrM6WssTsDacrM1F'
+from alchemyapi import AlchemyAPI
+alchemyapi = AlchemyAPI()
+
+import re
+
+import json
 
 def write_to_file(directory, data_text):
   current_directory = os.getcwd()
@@ -183,19 +191,120 @@ def write_technical_files(stock_code, start_time, end_time):
 
   write_to_file(ratio_directory, ratio_text)
 
-def write_social_files(key_word):
-  print key_word
+def write_social_files(query_word):
+  print query_word
 
-  key_word += ' filter:safe -filter:links' # filter safe tweets without links
+  query_string = query_word
+  query_string += ' filter:safe -filter:links -http' # filter safe tweets without links
 
-  max_tweets = 100 # maximum 100 tweets
+  max_tweets = 30 # maximum 100 tweets
 
-  tweets = tweepy.Cursor(api.search, q=key_word, lang='en').items(max_tweets)    
+  count = 0
+  meta_count = 0
 
-  for tweet in tweets:
-    print tweet.text
+  while count < 5 and meta_count < 10:
+    meta_count += 1
+    count = 0
 
-  return
+    tweets = tweepy.Cursor(api.search, q=query_string, lang='en').items(max_tweets)    
+
+    tweet_text = ""
+
+    for tweet in tweets:
+      tweet_text += (tweet.text + " ")
+      count += 1
+    
+  if meta_count == 10:
+    clear_social_files()
+    return
+
+  print tweet_text
+
+  response = alchemyapi.keywords("text", tweet_text)
+
+  print response["keywords"]
+
+  keywords = response["keywords"]
+  keywords_count = 0
+
+  social_directory = '/data/social.json'
+
+  social_dict = { 'name': "sentiment", 'children': [] }
+
+  response = alchemyapi.sentiment("text", tweet_text)
+
+  print response
+
+  sentiment_score = float(response["docSentiment"]["score"])
+
+  if sentiment_score > 0.3:
+    color = "#00FF00"
+  elif sentiment_score > 0.1:
+    color = "#BBFF00"
+  elif sentiment_score > -0.1:
+    color = "#FFFF00"
+  elif sentiment_score > -0.3:
+    color = "#FF7700"
+  else:
+    color = "#FF0000"
+
+  social_dict["children"].append({"name": unicode(query_word), "size": str(500), "color": color})
+
+  for keyword in keywords:
+    if ('rt' not in keyword['text'].lower()) and (query_word.lower() != keyword['text'].lower()) and (keywords_count < 5) and (re.search('[a-zA-Z]', keyword['text'])):
+    # if (float(keyword['relevance']) >= 0.5) and ('rt' not in keyword['text'].lower()) and (query_word.lower() != keyword['text'].lower()) and (keywords_count < 5) and (re.search('[a-zA-Z]', keyword['text'])):
+      keywords_count += 1
+
+      # keyword["text"] = keyword["text"].replace(query_word, "")
+
+      query_string = keyword["text"]
+      query_string += ' filter:safe -filter:links -http' # filter safe tweets without links
+
+      max_tweets = 10 # maximum 100 tweets
+
+      count = 0
+      meta_count = 0
+
+      while count < 5 and meta_count < 10:
+        meta_count += 1
+        count = 0
+        
+        tweets = tweepy.Cursor(api.search, q=query_string, lang='en').items(max_tweets)    
+
+        tweet_text = ""
+
+        for tweet in tweets:
+          tweet_text += (tweet.text + " ")
+          count += 1
+
+      if meta_count == 10:
+        continue
+
+      print tweet_text
+
+      response = alchemyapi.sentiment("text", tweet_text)
+
+      print response
+
+      if response["docSentiment"]["type"] == "neutral":
+        sentiment_score = 0.0
+      else:
+        sentiment_score = float(response["docSentiment"]["score"])
+
+      if sentiment_score > 0.3:
+        color = "#00FF00"
+      elif sentiment_score > 0.1:
+        color = "#BBFF00"
+      elif sentiment_score > -0.1:
+        color = "#FFFF00"
+      elif sentiment_score > -0.3:
+        color = "#FF7700"
+      else:
+        color = "#FF0000"
+
+      social_dict["children"].append({"name": unicode(keyword["text"]), "size": str(int(500 * float(keyword['relevance']))), "color": color})
+
+  write_to_file(social_directory, json.dumps(social_dict, ensure_ascii=True))
 
 def clear_technical_files():
   clear_text = "date\tNIL\n"
