@@ -38,7 +38,7 @@ $(".search").on("click", function() {
     data: JSON.stringify(data),
     contentType: 'application/json;charset=UTF-8',
     success: function(result) {
-    	// updateTable();
+      // updateTable();
       updateLineGraph();
       updateBarGraph();
     }

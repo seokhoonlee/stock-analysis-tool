@@ -67,6 +67,11 @@ def social():
   return render_template("social.html",
                          title='Social Analysis')
 
+@app.route('/correlation')
+def correlation():
+  return render_template("correlation.html",
+                         title='Correlation Analysis')
+
 """query routing"""
 @app.route("/technical/query/<stock_code>/<start_time>/<end_time>", methods=['POST'])
 @crossdomain(origin='*')
@@ -75,7 +80,6 @@ def technical_query(stock_code, start_time, end_time):
 
   return render_template("technical.html",
                          title='Technical Analysis',
-                         technical=True,
                          data=True)
 
 @app.route("/social/query/<key_word>", methods=['POST'])
@@ -85,7 +89,16 @@ def social_query(key_word):
 
   return render_template("social.html",
                          title='Social Analysis',
-                         technical=True,
+                         data=True)
+
+@app.route("/correlation/query/<stock_code1>/<stock_code2>/<start_time>/<end_time>", methods=['POST'])
+@crossdomain(origin='*')
+def correlation_query(stock_code1, stock_code2, start_time, end_time):
+  file_manager.write_correlation_files(stock_code1, start_time, end_time, 1)
+  file_manager.write_correlation_files(stock_code2, start_time, end_time, 2)
+
+  return render_template("correlation.html",
+                         title='Correlation Analysis',
                          data=True)
 
 """clear routing"""
@@ -96,9 +109,7 @@ def technical_clear():
 
   return render_template("technical.html",
                          title='Technical Analysis',
-                         technical=True,
-                         data=True,
-                         clear=True)
+                         data=True)
 
 @app.route("/social/clear", methods=['POST'])
 @crossdomain(origin='*')

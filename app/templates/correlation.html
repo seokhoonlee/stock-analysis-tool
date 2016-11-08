@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block css_import %}
+
+{% endblock %}
+{% block content %}
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 col-lg-10 col-lg-offset-2">
+        <h2>Search for the Correlation between Stocks<br><br></h2>
+
+        <div class="row">
+          <div class="col-sm-6 col-md-6 col-lg-6">
+            <label>Name: Stock Code (eg. AAPL, GOOG, MSFT)</label>
+            <div class="form-group">
+              <input type="text" id='stockCode1'/>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-6 col-lg-6">
+            <label>Name: Stock Code (eg. AAPL, GOOG, MSFT)</label>
+            <div class="form-group">
+              <input type="text" id='stockCode2'/>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-6 col-md-6 col-lg-6">
+            <label>Date: From</label>
+            <div class="form-group">
+              <div class="input-group">
+                <input type='text' id='datetimepicker1'/>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-6 col-lg-6">
+            <label>Date: To</label>
+            <div class="form-group">
+              <div class="input-group">
+                <input type='text' id='datetimepicker2'/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <button class="btn btn-success search">Search</button>
+            <button class="btn btn-warning clear">Clear</button>
+          </div>
+        </div>
+
+        <div class="row">
+          <div id="svg-graph-technical"></div>
+          <script src="//d3js.org/d3.v3.min.js"></script>
+          
+
+
+          
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js_import %}
+  <!-- Get Stock Price using Yahoo Finance API -->
+  <script src="../static/tools/correlation-getter.js"></script>
+{% endblock %}  

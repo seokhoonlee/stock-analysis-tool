@@ -306,6 +306,25 @@ def write_social_files(query_word):
 
   write_to_file(social_directory, json.dumps(social_dict, ensure_ascii=True))
 
+def write_correlation_files(stock_code, start_time, end_time, num):
+  stock = Share(stock_code)
+
+  historical_data = stock.get_historical(start_time, end_time)
+
+  open_text = "date\t" + "Open\n"
+
+  for index, value in enumerate(historical_data):
+    date = str(historical_data[len(historical_data) - 1 - index]['Date'])
+    date = date.replace('-','')
+
+    stock_open = str(historical_data[len(historical_data) - 1 - index]['Open'])
+
+    open_text += date + "\t" + stock_open + "\n"
+
+  open_directory = '/data/open' + str(num) + '.tsv'
+
+  write_to_file(open_directory, open_text)
+
 def clear_technical_files():
   clear_text = "date\tNIL\n"
 
