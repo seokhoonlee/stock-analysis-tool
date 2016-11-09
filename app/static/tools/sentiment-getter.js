@@ -10,6 +10,7 @@ $(".search").on("click", function() {
     contentType: 'application/json;charset=UTF-8',
     success: function(result) {
       updateData();
+      drawWordGraph();
     }
   }); 
 
@@ -24,6 +25,7 @@ $(".clear").on("click", function() {
     contentType: 'application/json;charset=UTF-8',
     success: function(result) {
       updateData();
+      clearWordGraph();
     }
   }); 
 });

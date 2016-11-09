@@ -1,5 +1,3 @@
-drawBarGraph("ratio");
-
 function drawBarGraph(fileName) {
   var margin = {top: 50, right: 50, bottom: 50, left: 50},
     width = 550 - margin.left - margin.right,
@@ -81,10 +79,6 @@ function drawBarGraph(fileName) {
     d.value = +d.value;
     return d;
   }
-}
-
-function updateBarGraph() {
-  drawBarGraph("ratio");
 }
 
 function clearBarGraph() {
