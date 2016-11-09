@@ -194,6 +194,8 @@ def write_technical_files(stock_code, start_time, end_time):
 def write_social_files(query_word):
   print query_word
 
+  tweet_list = []
+
   query_string = query_word
   query_string += ' filter:safe -filter:links -http' # filter safe tweets without links
 
@@ -201,17 +203,16 @@ def write_social_files(query_word):
 
   count = 0
   meta_count = 0
+  tweet_text = ""
 
-  while count < 5 and meta_count < 3:
+  while count < 20 and meta_count < 3:
     meta_count += 1
-    count = 0
 
     tweets = tweepy.Cursor(api.search, q=query_string, lang='en').items(max_tweets)    
 
-    tweet_text = ""
-
     for tweet in tweets:
       tweet_text += (tweet.text + " ")
+      tweet_list.append(tweet.text)
       count += 1
     
   if meta_count == 3:
@@ -221,6 +222,9 @@ def write_social_files(query_word):
   print tweet_text
 
   response = alchemyapi.keywords("text", tweet_text)
+
+  if response["status"] == "ERROR":
+    return
 
   print response["keywords"]
 
@@ -233,9 +237,15 @@ def write_social_files(query_word):
 
   response = alchemyapi.sentiment("text", tweet_text)
 
+  if response["status"] == "ERROR":
+    return
+
   print response
 
-  sentiment_score = float(response["docSentiment"]["score"])
+  if response["docSentiment"]["type"] == "neutral":
+    sentiment_score = 0.0
+  else:
+    sentiment_score = float(response["docSentiment"]["score"])
 
   if sentiment_score > 0.3:
     color = "#00FF00"
@@ -264,17 +274,16 @@ def write_social_files(query_word):
 
       count = 0
       meta_count = 0
+      tweet_text = ""
 
-      while count < 5 and meta_count < 3:
+      while count < 20 and meta_count < 3:
         meta_count += 1
-        count = 0
         
         tweets = tweepy.Cursor(api.search, q=query_string, lang='en').items(max_tweets)    
 
-        tweet_text = ""
-
         for tweet in tweets:
           tweet_text += (tweet.text + " ")
+          tweet_list.append(tweet.text)
           count += 1
 
       if meta_count == 3:
@@ -283,6 +292,9 @@ def write_social_files(query_word):
       print tweet_text
 
       response = alchemyapi.sentiment("text", tweet_text)
+
+      if response["status"] == "ERROR":
+        return
 
       print response
 
@@ -304,7 +316,12 @@ def write_social_files(query_word):
 
       social_dict["children"].append({"name": unicode(keyword["text"]), "size": str(int(500 * float(keyword['relevance']))), "color": color})
 
+  tweet_directory = '/data/tweet.json'
+
+  write_to_file(tweet_directory, json.dumps(tweet_list, ensure_ascii=True))
   write_to_file(social_directory, json.dumps(social_dict, ensure_ascii=True))
+
+  return tweet_list
 
 def write_correlation_files(stock_code1, stock_code2, start_time, end_time):
   stock = Share(stock_code1)
@@ -342,6 +359,44 @@ def write_correlation_files(stock_code1, stock_code2, start_time, end_time):
   open_directory = '/data/open2.tsv'
 
   write_to_file(open_directory, open_text)
+
+  correlation_text = "date\t" + "Correlation\t" + "Zero\n"
+
+  for index, value in enumerate(historical_data2):
+    date = str(historical_data2[len(historical_data2) - 1 - index]['Date'])
+    date = date.replace('-','')
+
+    if index == 0:
+      correlation_text += date + "\t" + str(0.00) + "\t" + str(0.00) + "\n"
+      continue
+
+    change_stock1 = float(historical_data1[len(historical_data1) - 1 - index]['Open']) / float(historical_data1[len(historical_data1) - 1 - index - 1]['Open'])
+    change_stock2 = float(historical_data2[len(historical_data2) - 1 - index]['Open']) / float(historical_data2[len(historical_data2) - 1 - index - 1]['Open'])
+
+    change_stock1 -= 1
+    change_stock2 -= 1
+
+    if change_stock1 >= 0 and change_stock1 < 0.0001:
+      change_stock1 = 0.0001
+    elif change_stock1 < 0 and change_stock1 > -0.0001:
+      change_stock1 = -0.0001
+
+    if change_stock2 >= 0 and change_stock2 < 0.0001:
+      change_stock2 = 0.0001
+    elif change_stock2 < 0 and change_stock2 > -0.0001:
+      change_stock2 = -0.0001
+
+    stock_correlation = change_stock2 / change_stock1
+
+    if stock_correlation > 1 or stock_correlation < -1:
+      stock_correlation = 1 / stock_correlation
+
+    correlation_text += date + "\t" + str(stock_correlation) + "\t" + str(0.00) + "\n"
+
+
+  correlation_directory = '/data/correlation.tsv'
+
+  write_to_file(correlation_directory, correlation_text)
 
 
 

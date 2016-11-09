@@ -39,6 +39,7 @@ $(".search").on("click", function() {
     contentType: 'application/json;charset=UTF-8',
     success: function(result) {
       // updateTable();
+      clearLineGraph();
       drawLineGraph("openclose", "Price (US$)");
       drawLineGraph("highlow", "Price (US$)");
       drawLineGraph("volume", "Volume (x1000)");

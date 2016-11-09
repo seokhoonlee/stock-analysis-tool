@@ -16,8 +16,10 @@ $(".search").on("click", function() {
     data: JSON.stringify(data),
     contentType: 'application/json;charset=UTF-8',
     success: function(result) {
+      clearLineGraph();
       drawLineGraph("open1", "Price (US$)");
       drawLineGraph("open2", "Price (US$)");
+      drawLineGraph("correlation", "Ratio");
     }
   }); 
 

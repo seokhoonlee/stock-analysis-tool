@@ -76,6 +76,15 @@ function drawLineGraph(fileName, unit) {
       .style("text-anchor", "end")
       .text(unit);
 
+    // if (fileName == "correlation") {
+    //   svg.append("svg:line")
+    //     .attr("x1", 0)
+    //     .attr("x2", width)
+    //     .attr("y1", height / 2)
+    //     .attr("y2", height / 2)
+    //     .style("stroke", "#000000");
+    // }
+
     var stock = svg.selectAll(".stock")
       .data(stocks)
       .enter().append("g")
@@ -83,9 +92,17 @@ function drawLineGraph(fileName, unit) {
 
     stock.append("path")
       .attr("class", "line")
-      .attr("d", function(d) { return line(d.values); })
+      .attr("d", function(d) { 
+        return line(d.values); 
+      })
       .style("stroke", function(d) { 
-        if (d.name == 'Open') {
+        if (fileName == 'open1') {
+          return "#1f77b4";
+        } else if (fileName == 'open2') {
+          return "#d62728";
+        } else if (d.name == 'Correlation') {
+          return "#9467bd";
+        } else if (d.name == 'Open') {
           return "#1f77b4";
         } else if (d.name == 'Close') {
           return "#ff7f0e";

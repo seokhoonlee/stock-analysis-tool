@@ -65,7 +65,7 @@ def technical():
 @app.route('/social')
 def social():
   file_manager.clear_social_files()
-  
+
   return render_template("social.html",
                          title='Social Analysis')
 
@@ -135,4 +135,13 @@ def social_data():
   file_name = 'social'
   extension = '.json'
 
+  return file_manager.read_from_file(file_name, extension)
+
+@app.route("/tweet/data")
+@crossdomain(origin='*')
+def tweet_data():
+  file_name = 'tweet'
+  extension = '.json'
+
+  print file_manager.read_from_file(file_name, extension)
   return file_manager.read_from_file(file_name, extension)
